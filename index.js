@@ -1,22 +1,32 @@
-const redux = require('redux');
-const createStore = redux.createStore;
-const initialState = { numberOfBooks: 10, numberOfPen: 20 }
+const {redux,createStore, combineReducers} = require('redux');
+
+const bookInitialState = { numberOfBooks: 10}
+const penInitialState = { numberOfPen: 20 }
 function buyBook() { return { type: "Buy_Book", payload: "My First Action for Redux App" } }
 function buyPen() { return { type: "Buy_Pen", payload: "My Second Action for Redux App" } }
-const Reducer = (state = initialState, action) => {
+const BookReducer = (state = bookInitialState, action) => {
     switch (action.type) {
         case "Buy_Book": return {
             ...state,
             numberOfBooks: state.numberOfBooks - 1
         }
-        case "Buy_Pen": return {
+        default: return state;
+    }
+}
+const PenReducer = (state = penInitialState, action) => {
+    switch (action.type) {
+       case "Buy_Pen": return {
             ...state,
             numberOfPen: state.numberOfPen - 1
         }
         default: return state;
     }
 }
-const store = createStore(Reducer);
+const reducer=combineReducers({
+    book:BookReducer,
+    pen:PenReducer
+});
+const store = createStore(reducer);
 console.log("Initial State Value: ", store.getState());
 const unsubscribe = store.subscribe = () => {
     console.log("Update State Value: ", store.getState());
